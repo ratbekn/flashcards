@@ -14,4 +14,6 @@ RUN dotnet publish -c Release -o publish
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
 COPY --from=build /app/publish .
-ENTRYPOINT [ "dotnet", "Flashcards.WebAPI.dll" ]
+# ENTRYPOINT [ "dotnet", "Flashcards.WebAPI.dll" ]
+
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet Flashcards.WebAPI.dll
