@@ -37,5 +37,10 @@ namespace Flashcards.Domain.Services.Decks
         {
             return await repository.GetAsync(id);
         }
+
+        public async Task<List<Deck>> GetAllAsync()
+        {
+            return await repository.GetAllAsync();
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace Flashcards.Domain.Services.Decks
     {
         Task<Deck> CreateAsync(string name, IEnumerable<Card> cards);
         Task<Deck> GetAsync(Guid id);
+        Task<List<Deck>> GetAllAsync();
     }
 }

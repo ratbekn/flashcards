@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Domain.Services.Cards;
@@ -34,7 +35,13 @@ namespace Flashcards.WebAPI.Controllers
 
             var newDeck = await decksService.CreateAsync(deckCreateModel.Name, newCards);
 
-            return CreatedAtAction(nameof(GetAsync), new { id = newDeck.Id }, newDeck);
+            return CreatedAtAction(nameof(GetAsync), new { id = newDeck.Id }, new DeckModel
+            {
+                Id = newDeck.Id,
+                Name = newDeck.Name,
+                Cards = newCards
+                    .ToList()
+            });
         }
 
         [HttpGet("{id}")]
@@ -52,6 +59,27 @@ namespace Flashcards.WebAPI.Controllers
                 Cards = cards
                     .ToList()
             });
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<DeckModel>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllAsync(Guid id)
+        {
+            var decks = await decksService.GetAllAsync();
+
+            return Ok(await Task.WhenAll(decks.Select(async deck =>
+            {
+                var cards = await Task.WhenAll(deck.CardsIds
+                    .Select(cardId => cardsService.GetAsync(cardId)));
+
+                return new DeckModel
+                {
+                    Id = deck.Id,
+                    Name = deck.Name,
+                    Cards = cards
+                        .ToList()
+                };
+            })));
         }
     }
 }

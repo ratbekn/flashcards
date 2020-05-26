@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Domain.Entities.Decks;
 
@@ -17,5 +18,9 @@ namespace Flashcards.Domain.Repositories.Decks
         }
 
         public Task<Deck> GetAsync(Guid id) => Task.FromResult(decks[id]);
+        public Task<List<Deck>> GetAllAsync()
+        {
+            return Task.FromResult(decks.Values.ToList());
+        }
     }
 }
