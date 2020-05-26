@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-export class Counter extends Component {
-  static displayName = Counter.name;
+export class CreateDeck extends Component {
+  static displayName = CreateDeck.name;
 
   constructor(props) {
     super(props);
@@ -53,7 +53,7 @@ export class Counter extends Component {
   }
 
   handleCreateDeck(e) {
-    fetch('https://localhost:5001/api/decks', {
+    fetch('https://flashcards-charlies-angels.herokuapp.com/api/decks', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -63,7 +63,9 @@ export class Counter extends Component {
         name: this.state.name,
         cards: this.state.cards,
       })
-})
+    })
+
+    this.props.history.push('/')
   }
 
   render() {

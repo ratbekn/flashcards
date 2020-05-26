@@ -13,7 +13,7 @@ export class Home extends Component {
   }
 
   componentDidMount() {
-    fetch("https://localhost:5001/api/decks")
+    fetch("https://flashcards-charlies-angels.herokuapp.com/api/decks")
       .then(response => response.json())
       .then(data => this.setState({ decks: [...this.state.decks, ...data] }));
   }
