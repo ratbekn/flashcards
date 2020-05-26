@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Flashcards.Domain.Entities.Decks;
+
+namespace Flashcards.Domain.Repositories.Decks
+{
+    public class InMemoryDecksRepository : IDecksRepository
+    {
+        private readonly Dictionary<Guid, Deck> decks = new Dictionary<Guid, Deck>();
+
+        public Task<Guid> AddAsync(Deck deck)
+        {
+            decks.Add(deck.Id, deck);
+
+            return Task.FromResult(deck.Id);
+        }
+
+        public Task<Deck> GetAsync(Guid id) => Task.FromResult(decks[id]);
+    }
+}

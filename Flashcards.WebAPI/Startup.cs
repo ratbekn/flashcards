@@ -1,6 +1,11 @@
+using Flashcards.Domain.Repositories;
+using Flashcards.Domain.Repositories.Cards;
+using Flashcards.Domain.Repositories.Decks;
+using Flashcards.Domain.Services.Cards;
+using Flashcards.Domain.Services.Decks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +25,13 @@ namespace Flashcards.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<ICardsRepository, InMemoryCardsRepository>();
+            services.AddSingleton<IDecksRepository, InMemoryDecksRepository>();
+
+            services.AddSingleton<ICardsService, CardsService>();
+            services.AddSingleton<IDecksService, DecksService>();
+
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             services.AddControllersWithViews();
 

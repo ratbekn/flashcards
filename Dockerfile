@@ -6,9 +6,11 @@ RUN apt-get install -y nodejs
 
 COPY *.sln ./
 COPY Flashcards.WebAPI/*.csproj ./Flashcards.WebAPI/
+COPY Flashcards.Domain/*.csproj ./Flashcards.Domain/
 RUN dotnet restore
 
 COPY Flashcards.WebAPI/. ./Flashcards.WebAPI/
+COPY Flashcards.Domain/. ./Flashcards.Domain/
 RUN dotnet publish -c Release -o publish
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
