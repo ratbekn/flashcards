@@ -5,26 +5,93 @@ export class Counter extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { currentCount: 0 };
-    this.incrementCounter = this.incrementCounter.bind(this);
+    this.state = {
+      name: "",
+      cards: []
+    };
   }
 
-  incrementCounter() {
+  addCard() {
     this.setState({
-      currentCount: this.state.currentCount + 1
+      cards: [...this.state.cards, ""]
     });
+  }
+
+  handleTitle(e) {
+    this.state.name = e.target.value
+
+    this.setState({
+      name: this.state.name,
+      cards: this.state.cards
+    })
+  }
+
+  handleQuestion(e, i) {
+    let currentCard = this.state.cards[i]
+    this.state.cards[i] = {
+      question: e.target.value,
+      answer: currentCard.answer
+    }
+
+    this.setState({
+      name: this.state.name,
+      cards: this.state.cards
+    })
+  }
+
+  handleAnswer(e, i) {
+    let currentCard = this.state.cards[i]
+    this.state.cards[i] = {
+      question: currentCard.question,
+      answer: e.target.value
+    }
+
+    this.setState({
+      name: this.state.name,
+      cards: this.state.cards
+    })
+  }
+
+  handleCreateDeck(e) {
+    fetch('https://localhost:5001/api/decks', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: this.state.name,
+        cards: this.state.cards,
+      })
+})
   }
 
   render() {
     return (
       <div>
-        <h1>Counter</h1>
+        <h1>Название набора: </h1>
+        <input onChange={(e) => this.handleTitle(e)} />
 
-        <p>This is a simple example of a React component.</p>
+        {
+          this.state.cards.map((card, i) => {
+            return (
+              <div key={i}>
+                <hr />
+                <p>Вопрос: </p>
+                <input onChange={(e) => this.handleQuestion(e, i)} value={card.question} />
+                <p>Ответ: </p>
+                <input onChange={(e) => this.handleAnswer(e, i)} value={card.answer} />
+              </div>
+            )
+          })
+        }
 
-        <p aria-live="polite">Current count: <strong>{this.state.currentCount}</strong></p>
+        <hr />
+        <button className="btn btn-primary" onClick={(e) => this.addCard(e)}>Добавить карточку</button>
 
-        <button className="btn btn-primary" onClick={this.incrementCounter}>Increment</button>
+        <br />
+        <br />
+        <button className="btn btn-primary" onClick={(e) => this.handleCreateDeck(e)}>Создать набор</button>
       </div>
     );
   }
