@@ -12,24 +12,27 @@ export class Home extends Component {
     }
   }
 
-  componentDidMount() {
-    fetch("https://flashcards-charlies-angels.herokuapp.com/api/decks")
+  async componentDidMount() {
+    await fetch("api/decks")
       .then(response => response.json())
-      .then(data => this.setState({ decks: [...this.state.decks, ...data] }));
+      .then(data => this.setState({
+         decks: [...this.state.decks, ...data]
+      }))
+      .catch(e => console.log(e));
   }
 
   render() {
     const { decks } = this.state;
 
     return (
-      <div class="card-deck">
+      <div className="card-deck">
           {
             decks.map(deck =>
               <div key={deck.id}>
                 <p>Набор: {deck.name}</p>
                 {
                     deck.cards.map(card =>
-                      <div class="card text-white bg-dark mb-3">
+                      <div key={card.id} className="card text-white bg-dark mb-3">
                         <p>{card.question} : {card.answer}</p>
                       </div>
                     )
