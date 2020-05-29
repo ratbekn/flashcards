@@ -8,15 +8,18 @@ export class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      decks: []
-    }
+
+  }
+
+  state = {
+    decks: [],
+    decksLoaded: false
   }
 
   componentDidMount() {
     fetch("/api/decks")
       .then(response => response.json())
-      .then(data => this.setState({ decks: [...this.state.decks, ...data] }));
+      .then(data => this.setState({ decks: data, decksLoaded: true }));
   }
 
   render() {
@@ -35,6 +38,17 @@ export class Home extends Component {
               </div>
             </div>)
         }
+        {this.state.decksLoaded &&
+          <div className="col-md-3 col-sm-12 card-container">
+            <div className="card">
+              <div className="card-body">
+                <h5 className="card-title">
+                  <Link to="/add">Добавить набор</Link>
+                </h5>
+              </div>
+            </div>
+          </div>
+        }
       </div>
     );
   }
@@ -42,7 +56,7 @@ export class Home extends Component {
 
 const getCardText = (deck) => {
   const cards = deck.cards;
-  if (!cards) 
+  if (!cards)
     return;
   const firstThree = cards.slice(0, 3).map(c => c.question).join(', ');
   return cards.length > 3 ? firstThree + "..." : firstThree;
