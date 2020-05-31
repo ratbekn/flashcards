@@ -7,14 +7,14 @@ export class Home extends Component {
 
   constructor(props) {
     super(props);
-
+    this.state = {
+      decks: [],
+      decksLoaded: false
+    };
 
   }
 
-  state = {
-    decks: [],
-    decksLoaded: false
-  }
+ 
 
   componentDidMount() {
     fetch("/api/decks")
@@ -32,8 +32,9 @@ export class Home extends Component {
             <div key={deck.id} className="col-md-3 col-sm-12 card-container">
               <div className="card">
                 <div className="card-body">
-                  <h5 className="card-title">{deck.name}</h5>
+                <Link to={`/deck/${deck.id}`}><h5 className="card-title">{deck.name}</h5></Link>
                   <p className="card-text">{getCardText(deck)}</p>
+                  
                 </div>
               </div>
             </div>)
