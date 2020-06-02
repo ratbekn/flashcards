@@ -53,7 +53,7 @@ export class CreateDeck extends Component {
   }
 
   handleCreateDeck(e) {
-    fetch('https://flashcards-charlies-angels.herokuapp.com/api/decks', {
+    fetch('/api/decks', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
