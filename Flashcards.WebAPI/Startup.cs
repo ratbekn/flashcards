@@ -42,7 +42,7 @@ namespace Flashcards.WebAPI
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddIdentityServer()
+            services.AddIdentityServer(options => options.IssuerUri = Configuration["IdentityServer:IssuerUri"])
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             services.AddAuthentication()
