@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import shuffle from 'lodash/shuffle';
 import { Card } from "./Card.js";
+import authService from "./api-authorization/AuthorizeService";
 
 export class Deck extends Component {
     constructor(props) {
@@ -12,9 +13,7 @@ export class Deck extends Component {
     }
 
     componentDidMount() {
-        fetch(`/api/decks/${this.props.match.params.id}`)
-            .then(response => response.json())
-            .then(data => this.setState({ cards: shuffle(data.cards) }));
+        this.populateDeck();
     }
 
     render() {
@@ -35,6 +34,18 @@ export class Deck extends Component {
 
     onNextCard = () => {
         this.setState({ indexShownCard: this.state.indexShownCard + 1 });
+    }
+
+    async populateDeck()
+    {
+        const token = await authService.getAccessToken();
+
+        await fetch(`/api/decks/${this.props.match.params.id}`, {
+            headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+        })
+            .then(response => response.json())
+            .then(data => this.setState({ cards: shuffle(data.cards) }));
+
     }
 
 }

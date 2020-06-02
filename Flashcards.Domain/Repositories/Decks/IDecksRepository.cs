@@ -10,5 +10,6 @@ namespace Flashcards.Domain.Repositories.Decks
         Task<Guid> AddAsync(Deck deck);
         Task<Deck> GetAsync(Guid id);
         Task<List<Deck>> GetAllAsync();
+        Task<IEnumerable<Deck>> GetUsersDecks(Guid userId);
     }
 }

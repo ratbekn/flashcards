@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import "./Home.css";
+import authService from './api-authorization/AuthorizeService'
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -15,10 +16,7 @@ export class Home extends Component {
   }
 
   componentDidMount() {
-    debugger;
-    fetch("/api/decks")
-      .then(response => response.json())
-      .then(data => this.setState({ decks: data, decksLoaded: true }));
+    this.populateDecks();
   }
 
   render() {
@@ -33,7 +31,7 @@ export class Home extends Component {
                 <div className="card-body">
                 <Link to={`/deck/${deck.id}`}><h5 className="card-title">{deck.name}</h5></Link>
                   <p className="card-text">{getCardText(deck)}</p>
-                  
+
                 </div>
               </div>
             </div>)
@@ -51,6 +49,16 @@ export class Home extends Component {
         }
       </div>
     );
+  }
+
+  async populateDecks() {
+    const token = await authService.getAccessToken();
+
+    await fetch("/api/decks", {
+            headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+    })
+        .then(response => response.json())
+        .then(data => this.setState({ decks: data, decksLoaded: true }));
   }
 }
 

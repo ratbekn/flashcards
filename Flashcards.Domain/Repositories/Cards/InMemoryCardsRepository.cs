@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Domain.Entities.Cards;
 
@@ -17,5 +18,9 @@ namespace Flashcards.Domain.Repositories.Cards
         }
 
         public Task<Card> GetAsync(Guid id) => Task.FromResult(cards[id]);
+        public Task<IEnumerable<Card>> GetUsersCards(Guid userId)
+        {
+            return Task.FromResult(cards.Values.Where(card => card.UserId == userId));
+        }
     }
 }

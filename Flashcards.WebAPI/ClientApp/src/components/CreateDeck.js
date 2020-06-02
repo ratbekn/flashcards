@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import authService from './api-authorization/AuthorizeService'
 
 export class CreateDeck extends Component {
   static displayName = CreateDeck.name;
@@ -52,12 +53,16 @@ export class CreateDeck extends Component {
     })
   }
 
-  async handleCreateDeck(e) {
+  async handleCreateDeck() {
+    const token = await authService.getAccessToken();
     await fetch('/api/decks', {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        ...{
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        ...(!token ? {} : { 'Authorization': `Bearer ${token}` })
       },
       body: JSON.stringify({
         name: this.state.name,
@@ -93,7 +98,7 @@ export class CreateDeck extends Component {
 
         <br />
         <br />
-        <button className="btn btn-primary" onClick={(e) => this.handleCreateDeck(e)}>Создать набор</button>
+        <button className="btn btn-primary" onClick={() => this.handleCreateDeck()}>Создать набор</button>
       </div>
     );
   }

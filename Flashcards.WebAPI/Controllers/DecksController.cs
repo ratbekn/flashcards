@@ -5,35 +5,39 @@ using System.Threading.Tasks;
 using Flashcards.Domain.Services.Cards;
 using Flashcards.Domain.Services.Decks;
 using Flashcards.WebAPI.Models.Decks;
+using Flashcards.WebAPI.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Logging;
 
 namespace Flashcards.WebAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class DecksController : ControllerBase
     {
         private readonly IDecksService decksService;
         private readonly ICardsService cardsService;
-        private readonly IActionContextAccessor actionContextAccessor;
+        private readonly ILogger<DecksController> logger;
 
-        public DecksController(IDecksService decksService, ICardsService cardsService, IActionContextAccessor actionContextAccessor)
+        public DecksController(IDecksService decksService, ICardsService cardsService, ILogger<DecksController> logger)
         {
             this.decksService = decksService;
             this.cardsService = cardsService;
-            this.actionContextAccessor = actionContextAccessor;
+            this.logger = logger;
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(DeckModel), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateAsync(DeckCreateModel deckCreateModel)
         {
+            var userId = HttpContext.User.GetUserId();
             var newCards = await Task.WhenAll(deckCreateModel.Cards
-                .Select(newCard => cardsService.CreateAsync(newCard.Question, newCard.Answer)));
+                .Select(newCard => cardsService.CreateAsync(userId, newCard.Question, newCard.Answer)));
 
-            var newDeck = await decksService.CreateAsync(deckCreateModel.Name, newCards);
+            var newDeck = await decksService.CreateAsync(userId, deckCreateModel.Name, newCards);
 
             return CreatedAtAction(nameof(GetAsync), new { id = newDeck.Id }, new DeckModel
             {
@@ -63,9 +67,9 @@ namespace Flashcards.WebAPI.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<DeckModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllAsync(Guid id)
+        public async Task<IActionResult> GetAllAsync()
         {
-            var decks = await decksService.GetAllAsync();
+            var decks = await decksService.GetUsersDecks(HttpContext.User.GetUserId());
 
             return Ok(await Task.WhenAll(decks.Select(async deck =>
             {

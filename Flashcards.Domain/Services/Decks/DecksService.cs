@@ -17,11 +17,12 @@ namespace Flashcards.Domain.Services.Decks
             this.repository = repository;
         }
 
-        public async Task<Deck> CreateAsync(string name, IEnumerable<Card> cards)
+        public async Task<Deck> CreateAsync(Guid userId, string name, IEnumerable<Card> cards)
         {
             var newDeck = new Deck
             {
                 Id = Guid.NewGuid(),
+                UserId = userId,
                 Name = name,
                 CardsIds = cards
                     .Select(card => card.Id)
@@ -41,6 +42,12 @@ namespace Flashcards.Domain.Services.Decks
         public async Task<List<Deck>> GetAllAsync()
         {
             return await repository.GetAllAsync();
+        }
+
+        public async Task<List<Deck>> GetUsersDecks(Guid userId)
+        {
+            return (await repository.GetUsersDecks(userId))
+                .ToList();
         }
     }
 }

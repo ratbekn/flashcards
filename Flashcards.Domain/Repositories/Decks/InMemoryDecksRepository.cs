@@ -22,5 +22,7 @@ namespace Flashcards.Domain.Repositories.Decks
         {
             return Task.FromResult(decks.Values.ToList());
         }
+
+        public Task<IEnumerable<Deck>> GetUsersDecks(Guid userId) => Task.FromResult(decks.Values.Where(deck => deck.UserId == userId));
     }
 }

@@ -8,8 +8,9 @@ namespace Flashcards.Domain.Services.Decks
 {
     public interface IDecksService
     {
-        Task<Deck> CreateAsync(string name, IEnumerable<Card> cards);
+        Task<Deck> CreateAsync(Guid userId, string name, IEnumerable<Card> cards);
         Task<Deck> GetAsync(Guid id);
         Task<List<Deck>> GetAllAsync();
+        Task<List<Deck>> GetUsersDecks(Guid userId);
     }
 }

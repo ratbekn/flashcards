@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Flashcards.Domain.Entities.Cards;
 using Flashcards.Domain.Repositories;
+using Flashcards.Domain.Repositories.Cards;
 
 namespace Flashcards.Domain.Services.Cards
 {
@@ -14,11 +16,12 @@ namespace Flashcards.Domain.Services.Cards
             this.repository = repository;
         }
 
-        public async Task<Card> CreateAsync(string question, string answer)
+        public async Task<Card> CreateAsync(Guid userId, string question, string answer)
         {
             var newCard = new Card
             {
                 Id = Guid.NewGuid(),
+                UserId = userId,
                 Question = question,
                 Answer = answer
             };
@@ -29,5 +32,6 @@ namespace Flashcards.Domain.Services.Cards
         }
 
         public Task<Card> GetAsync(Guid id) => repository.GetAsync(id);
+        public Task<IEnumerable<Card>> GetUsersCards(Guid userId) => repository.GetUsersCards(userId);
     }
 }
