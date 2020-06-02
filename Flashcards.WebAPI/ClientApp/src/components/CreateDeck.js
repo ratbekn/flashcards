@@ -52,8 +52,8 @@ export class CreateDeck extends Component {
     })
   }
 
-  handleCreateDeck(e) {
-    fetch('/api/decks', {
+  async handleCreateDeck(e) {
+    await fetch('/api/decks', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

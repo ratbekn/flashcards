@@ -1,0 +1,10 @@
+.deck-card {
+    margin: 0 auto; /* Added */
+    float: none; 
+    margin-bottom: 10px; 
+}
+
+
+.card-answer-button {
+    margin-right: 10px;
+}

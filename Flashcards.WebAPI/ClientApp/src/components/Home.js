@@ -14,9 +14,8 @@ export class Home extends Component {
 
   }
 
- 
-
   componentDidMount() {
+    debugger;
     fetch("/api/decks")
       .then(response => response.json())
       .then(data => this.setState({ decks: data, decksLoaded: true }));
