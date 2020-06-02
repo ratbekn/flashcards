@@ -1,4 +1,3 @@
-using Flashcards.Domain.Repositories;
 using Flashcards.Domain.Repositories.Cards;
 using Flashcards.Domain.Repositories.Decks;
 using Flashcards.Domain.Services.Cards;
@@ -8,6 +7,7 @@ using Flashcards.WebAPI.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +57,13 @@ namespace Flashcards.WebAPI
                 configuration.RootPath = "ClientApp/build";
             });
 
+            services.AddCors(options => options.AddDefaultPolicy(builder =>
+            {
+                builder
+                    .WithOrigins(Configuration.GetSection("Origins:Allowed").Get<string[]>())
+                    .WithMethods(HttpMethods.Get, HttpMethods.Post);
+            }));
+
             services.AddSingleton<ICardsRepository, InMemoryCardsRepository>();
             services.AddSingleton<IDecksRepository, InMemoryDecksRepository>();
 
@@ -86,6 +93,8 @@ namespace Flashcards.WebAPI
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseIdentityServer();
