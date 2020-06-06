@@ -64,6 +64,14 @@ namespace Flashcards.WebAPI
                     .WithMethods(HttpMethods.Get, HttpMethods.Post);
             }));
 
+            services.AddSwaggerDocument();
+
+            services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+                options.LowercaseQueryStrings = true;
+            });
+
             services.AddSingleton<ICardsRepository, InMemoryCardsRepository>();
             services.AddSingleton<IDecksRepository, InMemoryDecksRepository>();
 
@@ -95,6 +103,9 @@ namespace Flashcards.WebAPI
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             app.UseRouting();
 
