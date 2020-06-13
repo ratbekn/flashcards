@@ -21,9 +21,9 @@ export class Card extends Component {
 
 
     render() {
-        const first = this.state.answerOrQuestion == 1 ? this.props.card.answer : this.props.card.question;
-        const second = this.state.answerOrQuestion == 1 ? this.props.card.question : this.props.card.answer;
-        if (this.state.position == "notClicked")
+        const first = this.state.answerOrQuestion === 1 ? this.props.card.answer : this.props.card.question;
+        const second = this.state.answerOrQuestion === 1 ? this.props.card.question : this.props.card.answer;
+        if (this.state.position === "notClicked")
             return (
                 <div className="card w-25 deck-card">
                     <div className="card-body">
@@ -33,7 +33,7 @@ export class Card extends Component {
                     </div>
                 </div>
             );
-        if (this.state.position == "clickedKnow")
+        if (this.state.position === "clickedKnow")
             return (
                 <div className="card deck-card">
                     <div className="card-body">
@@ -43,7 +43,7 @@ export class Card extends Component {
                     </div>
                 </div>
             );
-        if (this.state.position == "clickedNotKnow")
+        if (this.state.position === "clickedNotKnow")
             return (
                 <div className="card deck-card">
                     <div className="card-body">

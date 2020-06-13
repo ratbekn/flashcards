@@ -18,7 +18,7 @@ export class Deck extends Component {
 
     render() {
         const { cards } = this.state;
-        if (this.state.cards.length == 0)
+        if (this.state.cards.length === 0)
             return (<div className="d-flex justify-content-center">
                 <div className="spinner-border" role="status">
                     <span className="sr-only">Loading...</span>
