@@ -73,7 +73,7 @@ namespace Flashcards.WebAPI
                 options.LowercaseQueryStrings = true;
             });
 
-            services.AddSingleton<ICardsRepository, InMemoryCardsRepository>();
+            services.AddSingleton<ICardsRepository, MongoCardsRepository>();
             services.AddSingleton<IDecksRepository, InMemoryDecksRepository>();
 
             services.AddSingleton<ICardsService, CardsService>();
