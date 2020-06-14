@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MongoDB.Driver;
 
 namespace Flashcards.WebAPI
 {
@@ -79,6 +80,9 @@ namespace Flashcards.WebAPI
             services.AddSingleton<IDecksService, DecksService>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+            var db = new MongoClient(Configuration["MONGODB_URI"]).GetDatabase(Configuration["Database:Name"]);
+            services.AddSingleton(db);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
