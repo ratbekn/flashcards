@@ -74,7 +74,7 @@ namespace Flashcards.WebAPI
             });
 
             services.AddSingleton<ICardsRepository, MongoCardsRepository>();
-            services.AddSingleton<IDecksRepository, InMemoryDecksRepository>();
+            services.AddSingleton<IDecksRepository, MongoDecksRepository>();
 
             services.AddSingleton<ICardsService, CardsService>();
             services.AddSingleton<IDecksService, DecksService>();
