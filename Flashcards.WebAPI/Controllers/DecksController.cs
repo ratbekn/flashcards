@@ -10,7 +10,6 @@ using Flashcards.WebAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Flashcards.WebAPI.Controllers
 {
@@ -21,13 +20,11 @@ namespace Flashcards.WebAPI.Controllers
     {
         private readonly IDecksService decksService;
         private readonly ICardsService cardsService;
-        private readonly ILogger<DecksController> logger;
 
-        public DecksController(IDecksService decksService, ICardsService cardsService, ILogger<DecksController> logger)
+        public DecksController(IDecksService decksService, ICardsService cardsService)
         {
             this.decksService = decksService;
             this.cardsService = cardsService;
-            this.logger = logger;
         }
 
         [HttpPost]
@@ -117,6 +114,23 @@ namespace Flashcards.WebAPI.Controllers
                         .ToList()
                 };
             })));
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType( StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            var deck = await decksService.FindAsync(id);
+
+            if (deck == null)
+                return NotFound(id);
+
+            await cardsService.DeleteAsync(deck.CardsIds.ToArray());
+            await decksService.DeleteAsync(deck.Id);
+
+            return NoContent();
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Flashcards.Domain.Entities.Cards;
-using Flashcards.Domain.Repositories;
 using Flashcards.Domain.Repositories.Cards;
 
 namespace Flashcards.Domain.Services.Cards
@@ -33,5 +32,10 @@ namespace Flashcards.Domain.Services.Cards
 
         public Task<Card> GetAsync(Guid id) => repository.GetAsync(id);
         public Task<IEnumerable<Card>> GetUsersCards(Guid userId) => repository.GetUsersCards(userId);
+
+        public async Task DeleteAsync(params Guid[] deleteCardsIds)
+        {
+            await repository.DeleteAsync(deleteCardsIds);
+        }
     }
 }

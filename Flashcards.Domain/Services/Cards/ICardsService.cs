@@ -10,5 +10,6 @@ namespace Flashcards.Domain.Services.Cards
         Task<Card> CreateAsync(Guid userId, string question, string answer);
         Task<Card> GetAsync(Guid id);
         Task<IEnumerable<Card>> GetUsersCards(Guid userId);
+        Task DeleteAsync(params Guid[] deleteCardsIds);
     }
 }

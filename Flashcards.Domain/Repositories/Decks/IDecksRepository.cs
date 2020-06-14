@@ -12,5 +12,6 @@ namespace Flashcards.Domain.Repositories.Decks
         Task<Deck> FindAsync(Guid id);
         Task<IEnumerable<Deck>> GetUsersDecks(Guid userId);
         Task<Deck> UpdateAsync(Guid deckId, Deck newDeck);
+        Task DeleteAsync(Guid deckId);
     }
 }

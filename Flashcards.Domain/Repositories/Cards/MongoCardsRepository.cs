@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Domain.Entities.Cards;
 using MongoDB.Driver;
@@ -31,6 +32,11 @@ namespace Flashcards.Domain.Repositories.Cards
         {
             return (await cardCollection.FindAsync(card => card.UserId == userId))
                 .ToEnumerable();
+        }
+
+        public async Task DeleteAsync(params Guid[] deleteCardsIds)
+        {
+            await cardCollection.DeleteManyAsync(card => deleteCardsIds.Contains(card.Id));
         }
 
         private async Task<Card> FindAsync(Guid cardId)

@@ -44,6 +44,11 @@ namespace Flashcards.Domain.Repositories.Decks
             throw new Exception($"Update deck {deckId} fail");
         }
 
+        public async Task DeleteAsync(Guid deckId)
+        {
+            await deckCollection.DeleteOneAsync(deck => deck.Id == deckId);
+        }
+
         private async Task<Deck> FindInternalAsync(Guid deckId)
         {
             return await (await deckCollection.FindAsync(deck => deck.Id == deckId))

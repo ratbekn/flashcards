@@ -45,5 +45,10 @@ namespace Flashcards.Domain.Services.Decks
             return (await repository.GetUsersDecks(userId))
                 .ToList();
         }
+
+        public async Task DeleteAsync(Guid deckId)
+        {
+            await repository.DeleteAsync(deckId);
+        }
     }
 }
