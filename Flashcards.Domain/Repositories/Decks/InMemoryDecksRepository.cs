@@ -18,10 +18,6 @@ namespace Flashcards.Domain.Repositories.Decks
         }
 
         public Task<Deck> GetAsync(Guid id) => Task.FromResult(decks[id]);
-        public Task<List<Deck>> GetAllAsync()
-        {
-            return Task.FromResult(decks.Values.ToList());
-        }
 
         public Task<IEnumerable<Deck>> GetUsersDecks(Guid userId) => Task.FromResult(decks.Values.Where(deck => deck.UserId == userId));
     }
