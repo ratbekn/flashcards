@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Flashcards.Domain.Services.Cards;
 using Flashcards.Domain.Services.Decks;
+using Flashcards.WebAPI.Models;
 using Flashcards.WebAPI.Models.Decks;
 using Flashcards.WebAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -31,6 +32,7 @@ namespace Flashcards.WebAPI.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(DeckModel), StatusCodes.Status201Created)]
+        [ProducesResponseType( StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateAsync(DeckCreateModel deckCreateModel)
         {
             var userId = HttpContext.User.GetUserId();
@@ -39,7 +41,7 @@ namespace Flashcards.WebAPI.Controllers
 
             var newDeck = await decksService.CreateAsync(userId, deckCreateModel.Name, newCards);
 
-            return CreatedAtAction(nameof(GetAsync), new { id = newDeck.Id }, new DeckModel
+            return CreatedAtAction(nameof(FindAsync), new { id = newDeck.Id }, new DeckModel
             {
                 Id = newDeck.Id,
                 Name = newDeck.Name,
@@ -48,11 +50,41 @@ namespace Flashcards.WebAPI.Controllers
             });
         }
 
+        [HttpPatch("{id}")]
+        [ProducesResponseType(typeof(DeckModel), StatusCodes.Status200OK)]
+        [ProducesResponseType( StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateAsync(Guid id, DeckUpdateModel deckUpdateModel)
+        {
+            var deck = await decksService.FindAsync(id);
+
+            if (deck == null)
+                return NotFound(id);
+
+            if (deckUpdateModel.Name != null)
+                deck.Name = deckUpdateModel.Name;
+
+            var userId = HttpContext.User.GetUserId();
+            var newCards = await Task.WhenAll((deckUpdateModel.NewCards ?? new List<CardCreateModel>())
+                .Select(newCard => cardsService.CreateAsync(userId, newCard.Question, newCard.Answer)));
+
+            deck.CardsIds.AddRange(newCards.Select(card => card.Id));
+            deck.CardsIds.RemoveAll(cardId => deckUpdateModel.DeleteCards?.Contains(cardId) ?? false);
+
+            return Ok(await decksService.UpdateAsync(deck.Id, deck));
+        }
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(DeckModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAsync(Guid id)
+        [ProducesResponseType( StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> FindAsync(Guid id)
         {
-            var deck = await decksService.GetAsync(id);
+            var deck = await decksService.FindAsync(id);
+
+            if (deck == null)
+                return NotFound(id);
+
             var cards = await Task.WhenAll(deck.CardsIds
                 .Select(cardId => cardsService.GetAsync(cardId)));
 
@@ -67,6 +99,7 @@ namespace Flashcards.WebAPI.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<DeckModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType( StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllAsync()
         {
             var decks = await decksService.GetUsersDecks(HttpContext.User.GetUserId());

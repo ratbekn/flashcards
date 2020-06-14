@@ -22,10 +22,11 @@ namespace Flashcards.Domain.Repositories.Decks
         {
             await deckCollection.InsertOneAsync(deck);
 
-            return (await FindAsync(deck.Id))?.Id ?? throw new Exception($"Insert deck {deck.Id} fail");
+            return (await FindInternalAsync(deck.Id))?.Id ?? throw new Exception($"Insert deck {deck.Id} fail");
         }
 
-        public async Task<Deck> GetAsync(Guid id) => await FindAsync(id) ?? throw new Exception($"Not found deck {id}");
+        public async Task<Deck> GetAsync(Guid id) => await FindInternalAsync(id) ?? throw new Exception($"Not found deck {id}");
+        public async Task<Deck> FindAsync(Guid id) => await FindInternalAsync(id);
 
         public async Task<IEnumerable<Deck>> GetUsersDecks(Guid userId)
         {
@@ -33,7 +34,17 @@ namespace Flashcards.Domain.Repositories.Decks
                 .ToEnumerable();
         }
 
-        private async Task<Deck> FindAsync(Guid deckId)
+        public async Task<Deck> UpdateAsync(Guid deckId, Deck newDeck)
+        {
+            var result = await deckCollection.ReplaceOneAsync(deck => deck.Id == deckId, newDeck);
+
+            if (result.IsAcknowledged)
+                return await FindInternalAsync(deckId);
+
+            throw new Exception($"Update deck {deckId} fail");
+        }
+
+        private async Task<Deck> FindInternalAsync(Guid deckId)
         {
             return await (await deckCollection.FindAsync(deck => deck.Id == deckId))
                 .FirstOrDefaultAsync();

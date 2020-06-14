@@ -34,10 +34,11 @@ namespace Flashcards.Domain.Services.Decks
             return newDeck;
         }
 
-        public async Task<Deck> GetAsync(Guid id)
-        {
-            return await repository.GetAsync(id);
-        }
+        public Task<Deck> UpdateAsync(Guid deckId, Deck newDeck) => repository.UpdateAsync(deckId, newDeck);
+
+        public async Task<Deck> GetAsync(Guid id) => await repository.GetAsync(id);
+
+        public async Task<Deck> FindAsync(Guid id) => await repository.FindAsync(id);
 
         public async Task<List<Deck>> GetUsersDecks(Guid userId)
         {
