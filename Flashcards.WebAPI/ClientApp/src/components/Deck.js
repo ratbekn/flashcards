@@ -32,7 +32,11 @@ export class Deck extends Component {
         );
     }
 
-    onNextCard = () => {
+    onNextCard = (position) => {
+        if (position == "clickedNotKnow")
+        {
+            this.state.cards.push(this.state.cards[this.state.indexShownCard]);
+        }
         this.setState({ indexShownCard: this.state.indexShownCard + 1 });
     }
 

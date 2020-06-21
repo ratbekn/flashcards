@@ -3,6 +3,7 @@ import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { CreateDeck } from './components/CreateDeck';
+import { EditDeck } from './components/EditDeck';
 import { Deck } from './components/Deck';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
@@ -19,6 +20,7 @@ export default class App extends Component {
         <AuthorizeRoute exact path='/' component={Home} />
         <AuthorizeRoute path='/add' component={CreateDeck} />
         <AuthorizeRoute path='/deck/:id' component={Deck} />
+        <AuthorizeRoute path='/edit/:id' component={EditDeck} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );

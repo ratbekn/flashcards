@@ -6,9 +6,8 @@ export class Card extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { position: "notClicked", answerOrQuestion: Math.floor(Math.random() * 2) };
+        this.state = { position: "notClicked", answerOrQuestion: Math.floor(Math.random() * 2)};
     }
-
 
 
     handleKnowClick = () => {
@@ -19,6 +18,11 @@ export class Card extends Component {
         this.setState({ position: "clickedNotKnow" })
     }
 
+    handleNextCard = () => {
+        const position = this.state.position;
+        this.state.position = "notClicked";
+        this.props.onNextCard(position);
+    }
 
     render() {
         const first = this.state.answerOrQuestion === 1 ? this.props.card.answer : this.props.card.question;
@@ -35,20 +39,20 @@ export class Card extends Component {
             );
         if (this.state.position === "clickedKnow")
             return (
-                <div className="card deck-card">
+                <div className="card w-25 deck-card">
                     <div className="card-body">
                         <h5 className="card-title">{second}</h5>
-                        <button className="btn btn-primary card-answer-button" onClick={this.props.onNextCard}>Следующая</button>
-                        <button className="btn btn-primary" onClick={this.handleNotKnowClick}>Не знаю</button>
+                        <button className="btn btn-primary card-answer-button" onClick={this.handleNextCard}>Следующая</button>
+                        <button className="btn btn-primary" onClick={() => {this.handleNotKnowClick(); this.handleNextCard();}}>Не знаю</button>
                     </div>
                 </div>
             );
         if (this.state.position === "clickedNotKnow")
             return (
-                <div className="card deck-card">
+                <div className="card w-25 deck-card">
                     <div className="card-body">
                         <h5 className="card-title">{second}</h5>
-                        <button className="btn btn-primary" onClick={this.props.onNextCard}>Следующая</button>
+                        <button className="btn btn-primary" onClick={this.handleNextCard}>Следующая</button>
                     </div>
                 </div>
             );
