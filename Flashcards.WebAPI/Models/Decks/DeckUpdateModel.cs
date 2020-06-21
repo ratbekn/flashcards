@@ -7,7 +7,7 @@ namespace Flashcards.WebAPI.Models.Decks
     {
         public string Name { get; set; }
 
-        public List<CardCreateModel> NewCards { get; set; }
+        public List<CardUpdateModel> Cards { get; set; }
 
         public List<Guid> DeleteCards { get; set; }
     }

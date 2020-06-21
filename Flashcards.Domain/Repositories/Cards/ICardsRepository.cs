@@ -9,6 +9,8 @@ namespace Flashcards.Domain.Repositories.Cards
     {
         Task<Guid> AddAsync(Card card);
         Task<Card> GetAsync(Guid id);
+        Task<Card> FindAsync(Guid id);
+        Task UpdateAsync(Card card);
         Task<IEnumerable<Card>> GetUsersCards(Guid userId);
         Task DeleteAsync(params Guid[] deleteCardsIds);
     }

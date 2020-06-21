@@ -58,12 +58,19 @@ namespace Flashcards.WebAPI.Controllers
             if (deck == null)
                 return NotFound(id);
 
+            var userId = HttpContext.User.GetUserId();
+            var cards = deckUpdateModel.Cards ?? new List<CardUpdateModel>();
+
+            foreach (var card in cards.Where(card => card.Id.HasValue))
+                await cardsService.UpdateOrDoNothingAsync(userId, card.Id.Value, card.Question, card.Answer);
+
+            var newCards = await Task.WhenAll(cards.Where(card => card.Id == null)
+                .Select(newCard => cardsService.CreateAsync(userId, newCard.Question, newCard.Answer)));
+
+            deck = await decksService.GetAsync(id);
+
             if (deckUpdateModel.Name != null)
                 deck.Name = deckUpdateModel.Name;
-
-            var userId = HttpContext.User.GetUserId();
-            var newCards = await Task.WhenAll((deckUpdateModel.NewCards ?? new List<CardCreateModel>())
-                .Select(newCard => cardsService.CreateAsync(userId, newCard.Question, newCard.Answer)));
 
             deck.CardsIds.AddRange(newCards.Select(card => card.Id));
             deck.CardsIds.RemoveAll(cardId => deckUpdateModel.DeleteCards?.Contains(cardId) ?? false);

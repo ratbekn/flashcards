@@ -30,6 +30,22 @@ namespace Flashcards.Domain.Services.Cards
             return newCard;
         }
 
+        public async Task UpdateOrDoNothingAsync(Guid userId, Guid cardId, string question, string answer)
+        {
+            var card = await repository.FindAsync(cardId);
+
+            if (card == null)
+                return;
+
+            await repository.UpdateAsync(new Card
+            {
+                Id = cardId,
+                UserId = userId,
+                Question = question,
+                Answer = answer
+            });
+        }
+
         public Task<Card> GetAsync(Guid id) => repository.GetAsync(id);
         public Task<IEnumerable<Card>> GetUsersCards(Guid userId) => repository.GetUsersCards(userId);
 
