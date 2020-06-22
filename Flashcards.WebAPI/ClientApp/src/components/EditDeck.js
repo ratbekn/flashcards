@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import authService from './api-authorization/AuthorizeService'
+import authService from './api-authorization/AuthorizeService';
+import { DeckEditor } from "./DeckEditor.js";
+import { Deck } from './Deck.js';
+import { Loader } from './Loader.js';
 
 export class EditDeck extends Component {
   static displayName = EditDeck.name;
@@ -12,10 +15,10 @@ export class EditDeck extends Component {
     };
   }
 
-
-  componentDidMount() {
+  componentDidMount()
+  {
     this.populateDeck();
-}
+  }
 
   async populateDeck()
     {
@@ -28,48 +31,7 @@ export class EditDeck extends Component {
             .then(data => this.setState({ name: data.name, cards: data.cards }));
     }
 
-  addCard() {
-    this.setState({
-      cards: [...this.state.cards, ""]
-    });
-  }
-
-  handleTitle(e) {
-    this.state.name = e.target.value
-
-    this.setState({
-      name: this.state.name,
-      cards: this.state.cards
-    })
-  }
-
-  handleQuestion(e, i) {
-    let currentCard = this.state.cards[i]
-    this.state.cards[i] = {
-      question: e.target.value,
-      answer: currentCard.answer
-    }
-
-    this.setState({
-      name: this.state.name,
-      cards: this.state.cards
-    })
-  }
-
-  handleAnswer(e, i) {
-    let currentCard = this.state.cards[i]
-    this.state.cards[i] = {
-      question: currentCard.question,
-      answer: e.target.value
-    }
-
-    this.setState({
-      name: this.state.name,
-      cards: this.state.cards
-    })
-  }
-
-  async handleEditDeck() {
+  handleEditDeck = async (name, cards, deleteCards) => {
     const token = await authService.getAccessToken();
     await fetch(`/api/decks/${this.props.match.params.id}`, {
       method: 'PATCH',
@@ -81,8 +43,9 @@ export class EditDeck extends Component {
         ...(!token ? {} : { 'Authorization': `Bearer ${token}` })
       },
       body: JSON.stringify({
-        name: this.state.name,
-        cards: this.state.cards,
+        name: name,
+        cards: cards,
+        deleteCards: deleteCards
       })
     })
 
@@ -91,31 +54,8 @@ export class EditDeck extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Название набора: </h1>
-        <input onChange={(e) => this.handleTitle(e)} />
-
-        {
-          this.state.cards.map((card, i) => {
-            return (
-              <div key={i}>
-                <hr />
-                <p>Вопрос: </p>
-                <input onChange={(e) => this.handleQuestion(e, i)} value={card.question} />
-                <p>Ответ: </p>
-                <input onChange={(e) => this.handleAnswer(e, i)} value={card.answer} />
-              </div>
-            )
-          })
-        }
-
-        <hr />
-        <button className="btn btn-primary" onClick={(e) => this.addCard(e)}>Добавить карточку</button>
-
-        <br />
-        <br />
-        <button className="btn btn-primary" onClick={() => this.handleEditDeck()}>Редактировать набор</button>
-      </div>
+      this.state.name ? <DeckEditor action={"Редактировать набор"} name={this.state.name} cards={this.state.cards} handleAction={this.handleEditDeck}></DeckEditor> 
+      : <Loader></Loader>
     );
   }
 }

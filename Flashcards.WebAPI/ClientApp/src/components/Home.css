@@ -3,5 +3,11 @@
 }
 
 .card {
-    min-height: 100px;
+    min-height: 170px;
+    max-height: 170px;
+}
+
+.no-border {
+    border: 0;
+    box-shadow: none; 
 }

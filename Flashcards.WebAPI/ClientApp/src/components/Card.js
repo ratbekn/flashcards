@@ -6,7 +6,7 @@ export class Card extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { position: "notClicked", answerOrQuestion: Math.floor(Math.random() * 2)};
+        this.state = { position: "notClicked", answerOrQuestion: Math.floor(Math.random() * 2) };
     }
 
 
@@ -43,7 +43,7 @@ export class Card extends Component {
                     <div className="card-body">
                         <h5 className="card-title">{second}</h5>
                         <button className="btn btn-primary card-answer-button" onClick={this.handleNextCard}>Следующая</button>
-                        <button className="btn btn-primary" onClick={() => {this.handleNotKnowClick(); this.handleNextCard();}}>Не знаю</button>
+                        <button className="btn btn-primary" onClick={() => { this.handleNotKnowClick(); this.handleNextCard(); }}>Не знаю</button>
                     </div>
                 </div>
             );
