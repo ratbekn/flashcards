@@ -70,7 +70,7 @@ export class DeckEditor extends Component {
     return (
       <div>
         <div className="input-group input-group-lg">
-        <input className="form-control no-border" placeholder="Название набора" onChange={(e) => this.handleTitle(e)} value={this.state.name} />
+        <input className="form-control no-border" placeholder="Введите название набора" onChange={(e) => this.handleTitle(e)} value={this.state.name} />
         </div>
         
       <div className="card-deck container">

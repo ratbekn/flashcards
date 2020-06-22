@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import shuffle from 'lodash/shuffle';
 import { Card } from "./Card.js";
 import { Loader } from "./Loader.js"
-import authService from "./api-authorization/AuthorizeService";
+import { getDeck } from './api.js';
 
 export class Deck extends Component {
     constructor(props) {
@@ -39,13 +39,15 @@ export class Deck extends Component {
     }
 
     async populateDeck() {
-        const token = await authService.getAccessToken();
-
-        await fetch(`/api/decks/${this.props.match.params.id}`, {
-            headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
-        })
-            .then(response => response.json())
-            .then(data => this.setState({ cards: shuffle(data.cards) }));
+        try {
+            const data = await getDeck(this.props.match.params.id);
+            this.setState({ cards: shuffle(data.cards) });
+        }
+            
+        catch(e)
+        {
+            alert("Произошла ошибка, попробуйте ещё раз");
+        }
     }
 
 }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import "./Home.css";
 import authService from './api-authorization/AuthorizeService';
 import { ModalClass } from "./ModalClass.js";
+import { deleteDeck, getDecks } from './api';
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -22,14 +23,14 @@ export class Home extends Component {
   }
 
   delete = async () => {
-    const token = await authService.getAccessToken();
+    try {
+      await deleteDeck(this.state.aboutToDelete);
+      this.setState({ aboutToDelete: null });
+    }
+    catch (e) {
+      alert("Произошла ошибка, попробуйте ещё раз");
+    }
 
-    await fetch(`/api/decks/${this.state.aboutToDelete}`, {
-      method: 'DELETE',
-      headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
-    });
-
-    this.setState({ aboutToDelete: null });
     this.populateDecks();
 
   }
@@ -79,13 +80,13 @@ export class Home extends Component {
   }
 
   async populateDecks() {
-    const token = await authService.getAccessToken();
-
-    await fetch("/api/decks", {
-      headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
-    })
-      .then(response => response.json())
-      .then(data => this.setState({ decks: data, decksLoaded: true }));
+    try {
+      const data = await getDecks();
+      this.setState({ decks: data, decksLoaded: true });
+    }
+    catch (e) {
+      alert("Произошла ошибка, попробуйте ещё раз");
+    }
   }
 }
 
