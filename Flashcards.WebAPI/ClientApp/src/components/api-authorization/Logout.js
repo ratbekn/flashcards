@@ -53,9 +53,9 @@ export class Logout extends Component {
             const action = this.props.action;
             switch (action) {
                 case LogoutActions.Logout:
-                    return (<div>Обработка выхода...</div>);
+                    return (<div>Выходим...</div>);
                 case LogoutActions.LogoutCallback:
-                    return (<div>Обработка коллбэка выхода</div>);
+                    return (<div>Выходим...</div>);
                 case LogoutActions.LoggedOut:
                     return (<div>{message}</div>);
                 default:

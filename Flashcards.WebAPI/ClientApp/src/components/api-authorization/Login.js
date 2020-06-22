@@ -51,9 +51,9 @@ export class Login extends Component {
         } else {
             switch (action) {
                 case LoginActions.Login:
-                    return (<div>Обработка логина...</div>);
+                    return (<div>Входим...</div>);
                 case LoginActions.LoginCallback:
-                    return (<div>Обработка логин коллбэка</div>);
+                    return (<div>Входим...</div>);
                 case LoginActions.Profile:
                 case LoginActions.Register:
                     return (<div></div>);
