@@ -33,7 +33,7 @@ export class Logout extends Component {
                 this.processLogoutCallback();
                 break;
             case LogoutActions.LoggedOut:
-                this.setState({ isReady: true, message: "You successfully logged out!" });
+                this.setState({ isReady: true, message: "Вы успешно вышли!" });
                 break;
             default:
                 throw new Error(`Invalid action '${action}'`);
@@ -53,9 +53,9 @@ export class Logout extends Component {
             const action = this.props.action;
             switch (action) {
                 case LogoutActions.Logout:
-                    return (<div>Processing logout</div>);
+                    return (<div>Обработка выхода...</div>);
                 case LogoutActions.LogoutCallback:
-                    return (<div>Processing logout callback</div>);
+                    return (<div>Обработка коллбэка выхода</div>);
                 case LogoutActions.LoggedOut:
                     return (<div>{message}</div>);
                 default:
@@ -82,7 +82,7 @@ export class Logout extends Component {
                     throw new Error("Invalid authentication result status.");
             }
         } else {
-            this.setState({ message: "You successfully logged out!" });
+            this.setState({ message: "Вы успешно вышли!" });
         }
     }
 
