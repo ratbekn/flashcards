@@ -16,11 +16,11 @@ export class Card extends Component {
 
     handleNotKnowClick = () => {
         this.setState({ position: "clickedNotKnow" });
-        console.log(this.state.position);
     }
 
     handleNextCard = (position) => {
         this.props.onNextCard(position);
+        this.setState({position: "notClicked"});
     }
 
     render() {
@@ -37,7 +37,7 @@ export class Card extends Component {
                         && <button className="btn btn-primary card-answer-button" onClick={position === "clickedKnow" ?
                             () => { this.handleNotKnowClick(); this.handleNextCard("clickedNotKnow"); }
                             : () => this.handleNotKnowClick()}>Не знаю</button>}
-                    {position != "notClicked" && <button className="btn btn-primary card-answer-button" onClick={() => this.handleNextCard("clickedKnow")}>Следующая</button>}
+                    {position != "notClicked" && <button className="btn btn-primary card-answer-button" onClick={() => this.handleNextCard(this.state.position)}>Следующая</button>}
                 </div>
             </div>
         );
