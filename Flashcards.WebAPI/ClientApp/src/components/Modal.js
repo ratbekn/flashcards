@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Modal, Button, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Modal as ReactstrapModal, Button, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 
-export class ModalClass extends Component {
-    static displayName = ModalClass.name;
+export class Modal extends Component {
+    static displayName = Modal.name;
 
     constructor(props) {
         super(props);
@@ -12,7 +12,7 @@ export class ModalClass extends Component {
 
     render() {
         return (
-            <Modal isOpen>
+            <ReactstrapModal isOpen>
                 <ModalHeader>
                     {this.props.title}
                 </ModalHeader>
@@ -25,6 +25,6 @@ export class ModalClass extends Component {
                     <Button onClick={this.props.cancel} color="secondary">{this.props.cancelButton}</Button>
                     <Button color="primary" onClick={this.props.success}>{this.props.successButton}</Button>
                 </ModalFooter>
-            </Modal>);
+            </ReactstrapModal>);
     }
 }

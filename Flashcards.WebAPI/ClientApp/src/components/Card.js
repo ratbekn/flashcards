@@ -15,48 +15,33 @@ export class Card extends Component {
     }
 
     handleNotKnowClick = () => {
-        this.setState({ position: "clickedNotKnow" })
+        this.setState({ position: "clickedNotKnow" });
+        console.log(this.state.position);
     }
 
-    handleNextCard = () => {
-        const position = this.state.position;
-        this.state.position = "notClicked";
+    handleNextCard = (position) => {
         this.props.onNextCard(position);
     }
 
     render() {
         const first = this.state.answerOrQuestion === 1 ? this.props.card.answer : this.props.card.question;
         const second = this.state.answerOrQuestion === 1 ? this.props.card.question : this.props.card.answer;
-        if (this.state.position === "notClicked")
-            return (
-                <div className="card w-25 deck-card">
-                    <div className="card-body">
-                        <h5 className="card-title">{first}</h5>
-                        <button className="btn btn-primary card-answer-button" onClick={this.handleKnowClick}>Знаю</button>
-                        <button className="btn btn-primary" onClick={this.handleNotKnowClick}>Не знаю</button>
-                    </div>
+        const position = this.state.position;
+        return (
+            <div className="card w-25 deck-card">
+                <div className="card-body">
+                    <h5 className="card-title">{position === "notClicked" ? first : second}</h5>
+                    {position === "notClicked" &&
+                        <button className="btn btn-primary card-answer-button" onClick={this.handleKnowClick}>Знаю</button>}
+                    {position != "clickedNotKnow"
+                        && <button className="btn btn-primary card-answer-button" onClick={position === "clickedKnow" ?
+                            () => { this.handleNotKnowClick(); this.handleNextCard("clickedNotKnow"); }
+                            : () => this.handleNotKnowClick()}>Не знаю</button>}
+                    {position != "notClicked" && <button className="btn btn-primary card-answer-button" onClick={() => this.handleNextCard("clickedKnow")}>Следующая</button>}
                 </div>
-            );
-        if (this.state.position === "clickedKnow")
-            return (
-                <div className="card w-25 deck-card">
-                    <div className="card-body">
-                        <h5 className="card-title">{second}</h5>
-                        <button className="btn btn-primary card-answer-button" onClick={this.handleNextCard}>Следующая</button>
-                        <button className="btn btn-primary" onClick={() => { this.handleNotKnowClick(); this.handleNextCard(); }}>Не знаю</button>
-                    </div>
-                </div>
-            );
-        if (this.state.position === "clickedNotKnow")
-            return (
-                <div className="card w-25 deck-card">
-                    <div className="card-body">
-                        <h5 className="card-title">{second}</h5>
-                        <button className="btn btn-primary" onClick={this.handleNextCard}>Следующая</button>
-                    </div>
-                </div>
-            );
-    }
+            </div>
+        );
 
+    }
 
 }

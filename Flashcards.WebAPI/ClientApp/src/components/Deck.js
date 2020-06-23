@@ -20,10 +20,9 @@ export class Deck extends Component {
     render() {
         const { cards } = this.state;
 
-        if (cards.length === 0)
-            return <Loader></Loader>;
-        console.log(cards);
-        if (this.state.indexShownCard >= cards.length && cards.length != 0)
+        if (!cards.length) // TODO
+            return <Loader />;
+        if (this.state.indexShownCard >= cards.length)
             return (<b>Карточки кончились</b>);
         const card = cards[this.state.indexShownCard];
         return (

@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import "./Home.css";
-import authService from './api-authorization/AuthorizeService';
-import { ModalClass } from "./ModalClass.js";
+import { Modal } from "./Modal.js";
 import { deleteDeck, getDecks } from './api';
 
 export class Home extends Component {
-  static displayName = Home.name;
 
   constructor(props) {
     super(props);
@@ -44,7 +42,15 @@ export class Home extends Component {
     return (
 
       <div className="card-deck">
-        {this.state.aboutToDelete != null && <ModalClass title={"Удаление набора"} cancelButton={"Отмена"} successButton={"Удалить"} cancel={this.cancelDelete} success={this.delete}>Вы действительно хотите удалить набор?</ModalClass>}
+        {this.state.aboutToDelete && 
+          <Modal 
+            title="Удаление набора" 
+            cancelButton="Отмена" 
+            successButton="Удалить" 
+            cancel={this.cancelDelete} 
+            success={this.delete}>
+              Вы действительно хотите удалить набор?
+          </Modal>}
         {
 
           decks.map(deck =>
@@ -52,8 +58,8 @@ export class Home extends Component {
               <div className="card">
                 <div className="card-body">
                   <Link to={`/deck/${deck.id}`}><h5 className="card-title">{deck.name}</h5></Link>
-                  <p className="card-text">{getCardText(deck)}</p>
-                  <Link to={`/edit/${deck.id}`} className="card-link">Редактировать </Link>
+                  <p className="card-text">{getCardDescription(deck)}</p>
+                  <Link to={`/edit/${deck.id}`} className="card-link">Редактировать</Link>
                   <a href="#" className="card-link" onClick={() => this.makeDeckAboutToDelete(deck.id)}>Удалить</a>
                 </div>
 
@@ -90,7 +96,7 @@ export class Home extends Component {
   }
 }
 
-const getCardText = (deck) => {
+const getCardDescription = (deck) => {
   const cards = deck.cards;
   if (!cards)
     return;

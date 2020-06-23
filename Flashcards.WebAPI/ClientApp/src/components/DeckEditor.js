@@ -4,7 +4,6 @@ import "./Home.css";
 import { Formik } from "formik";
 
 export class DeckEditor extends Component {
-  static displayName = DeckEditor.name;
 
   constructor(props) {
     super(props);
@@ -16,27 +15,26 @@ export class DeckEditor extends Component {
   }
 
 
- addCard() {
+  addCard = () => {
     this.setState({
-      cards: [...this.state.cards, ""]
+      cards: [...this.state.cards, {}]
     });
   }
 
-  handleTitle(e) {
-    this.state.name = e.target.value
+  handleTitle = (e) => {
+    const name = e.target.value;
 
     this.setState({
-      name: this.state.name,
-      cards: this.state.cards
+      name,
     })
   }
 
-  handleQuestion(e, i) {
-    const currentCard = this.state.cards[i]
+  handleQuestion(e, i) { // TODO immer
+    const currentCard = this.state.cards[i];
     this.state.cards[i] = {
       question: e.target.value,
       answer: currentCard.answer
-    }
+    };
 
     this.setState({
       name: this.state.name,
@@ -44,7 +42,7 @@ export class DeckEditor extends Component {
     })
   }
 
-  handleAnswer(e, i) {
+  handleAnswer(e, i) { // TODO тоже
     const currentCard = this.state.cards[i]
     this.state.cards[i] = {
       question: currentCard.question,
@@ -70,7 +68,7 @@ export class DeckEditor extends Component {
     return (
       <div>
         <div className="input-group input-group-lg">
-        <input className="form-control no-border" placeholder="Введите название набора" onChange={(e) => this.handleTitle(e)} value={this.state.name} />
+          <input className="form-control no-border" placeholder="Введите название набора" onChange={this.handleTitle} value={this.state.name} />
         </div>
         
       <div className="card-deck container">
@@ -99,7 +97,7 @@ export class DeckEditor extends Component {
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">
-                <button className="btn btn-link" onClick={(e) => this.addCard(e)}>Добавить карточку</button>
+                <button className="btn btn-link" onClick={this.addCard}>Добавить карточку</button>
                 </h5>
                 
               </div>

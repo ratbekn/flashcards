@@ -7,7 +7,6 @@ import { editDeck } from './api';
 import { getDeck } from './api';
 
 export class EditDeck extends Component {
-  static displayName = EditDeck.name;
 
   constructor(props) {
     super(props);
@@ -23,24 +22,32 @@ export class EditDeck extends Component {
 
   async populateDeck() {
     try {
-      const data = await getDeck(this.props.match.params.id);
-      this.setState({ name: data.name, cards: data.cards });
+      const deck = await getDeck(this.props.match.params.id);
+      this.setState({ name: deck.name, cards: deck.cards });
     }
     catch (e) {
       alert("Произошла ошибка, попробуйте ещё раз");
     }
 }
 
-  handleEditDeck = (name, cards, deleteCards) => {
-    editDeck(this.props.match.params.id, name, cards, deleteCards)
-      .then(() => this.props.history.push('/'))
-      .catch((e) => alert("Произошла ошибка, попробуйте ещё раз"));
+  handleEditDeck = async (name, cards, deleteCards) => {
+    try {
+      await editDeck(this.props.match.params.id, name, cards, deleteCards);
+      this.props.history.push('/'); 
+    } catch (e) {
+      alert("Произошла ошибка, попробуйте ещё раз");
+    }
   }
 
   render() {
     return (
-      this.state.name ? <DeckEditor action={"Редактировать набор"} name={this.state.name} cards={this.state.cards} handleAction={this.handleEditDeck}></DeckEditor>
-        : <Loader></Loader>
+      this.state.name ? 
+        <DeckEditor 
+          action="Редактировать набор"
+          name={this.state.name} 
+          cards={this.state.cards} 
+          handleAction={this.handleEditDeck} /> :
+        <Loader />
     );
   }
 }

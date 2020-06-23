@@ -4,7 +4,6 @@ import { DeckEditor } from './DeckEditor';
 import { createDeck } from './api';
 
 export class CreateDeck extends Component {
-  static displayName = CreateDeck.name;
 
   constructor(props) {
     super(props);
@@ -28,7 +27,7 @@ export class CreateDeck extends Component {
 
   render() {
     return (
-      <DeckEditor action={"Создать набор"} name={this.state.name} cards={this.state.cards} handleAction={this.handleCreateDeck}></DeckEditor>
+      <DeckEditor action={"Создать набор"} name={this.state.name} cards={this.state.cards} handleAction={this.handleCreateDeck} />
     );
   }
 }
