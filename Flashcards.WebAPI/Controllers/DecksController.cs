@@ -30,7 +30,7 @@ namespace Flashcards.WebAPI.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(DeckModel), StatusCodes.Status201Created)]
         [ProducesResponseType( StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> CreateAsync(DeckCreateModel deckCreateModel)
+        public async Task<IActionResult> Create(DeckCreateModel deckCreateModel)
         {
             var userId = HttpContext.User.GetUserId();
             var newCards = await Task.WhenAll(deckCreateModel.Cards
@@ -38,7 +38,7 @@ namespace Flashcards.WebAPI.Controllers
 
             var newDeck = await decksService.CreateAsync(userId, deckCreateModel.Name, newCards);
 
-            return CreatedAtAction(nameof(FindAsync), new { id = newDeck.Id }, new DeckModel
+            return CreatedAtAction(nameof(Find), new { id = newDeck.Id }, new DeckModel
             {
                 Id = newDeck.Id,
                 Name = newDeck.Name,
@@ -51,7 +51,7 @@ namespace Flashcards.WebAPI.Controllers
         [ProducesResponseType(typeof(DeckModel), StatusCodes.Status200OK)]
         [ProducesResponseType( StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateAsync(Guid id, DeckUpdateModel deckUpdateModel)
+        public async Task<IActionResult> Update(Guid id, DeckUpdateModel deckUpdateModel)
         {
             var deck = await decksService.FindAsync(id);
 
@@ -82,7 +82,7 @@ namespace Flashcards.WebAPI.Controllers
         [ProducesResponseType(typeof(DeckModel), StatusCodes.Status200OK)]
         [ProducesResponseType( StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FindAsync(Guid id)
+        public async Task<IActionResult> Find(Guid id)
         {
             var deck = await decksService.FindAsync(id);
 
@@ -104,7 +104,7 @@ namespace Flashcards.WebAPI.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<DeckModel>), StatusCodes.Status200OK)]
         [ProducesResponseType( StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAll()
         {
             var decks = await decksService.GetUsersDecks(HttpContext.User.GetUserId());
 
@@ -127,7 +127,7 @@ namespace Flashcards.WebAPI.Controllers
         [ProducesResponseType( StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var deck = await decksService.FindAsync(id);
 
