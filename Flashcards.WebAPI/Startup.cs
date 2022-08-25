@@ -81,7 +81,7 @@ namespace Flashcards.WebAPI
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-            var db = new MongoClient(Configuration["MONGODB_URI"]).GetDatabase(Configuration["Database:Name"]);
+            var db = new MongoClient(Configuration["MongoDB:URI"]).GetDatabase(Configuration["MongoDB:DB_Name"]);
             services.AddSingleton(db);
         }
 
