@@ -35,7 +35,7 @@ namespace Flashcards.WebAPI
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<ApplicationUser>(options =>
+            services.AddDefaultIdentity<User>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireUppercase = false;
@@ -44,7 +44,7 @@ namespace Flashcards.WebAPI
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddApiAuthorization<User, ApplicationDbContext>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

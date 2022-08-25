@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Flashcards.WebAPI.Data
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
+    public class ApplicationDbContext : ApiAuthorizationDbContext<User>
     {
         public ApplicationDbContext(
             DbContextOptions options,
