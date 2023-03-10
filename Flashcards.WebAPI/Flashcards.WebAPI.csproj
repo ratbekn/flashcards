@@ -48,7 +48,6 @@
   <ItemGroup>
     <None
         CopyToOutputDirectory="PreserveNewest"
-        ExcludeFromSingleFile="true"
         Update="app.db" />
     <None
         CopyToOutputDirectory="Always"
