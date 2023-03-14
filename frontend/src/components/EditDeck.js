@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import authService from './api-authorization/AuthorizeService';
 import { DeckEditor } from "./DeckEditor.js";
 import { Deck } from './Deck.js';
 import { Loader } from './Loader.js';

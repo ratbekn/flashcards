@@ -1,7 +1,4 @@
-import authService from "./api-authorization/AuthorizeService";
-
 async function request(url, method, body) {
-    const token = await authService.getAccessToken();
     const response = await fetch(url, {
         method,
         body,
@@ -10,7 +7,6 @@ async function request(url, method, body) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            ...(!token ? {} : { 'Authorization': `Bearer ${token}` })
         }
     });
     try
