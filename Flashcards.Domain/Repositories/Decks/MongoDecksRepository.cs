@@ -28,9 +28,9 @@ namespace Flashcards.Domain.Repositories.Decks
         public async Task<Deck> GetAsync(Guid id) => await FindInternalAsync(id) ?? throw new Exception($"Not found deck {id}");
         public async Task<Deck> FindAsync(Guid id) => await FindInternalAsync(id);
 
-        public async Task<IEnumerable<Deck>> GetUsersDecks(Guid userId)
+        public async Task<IEnumerable<Deck>> GetDecks()
         {
-            return (await deckCollection.FindAsync(card => card.UserId == userId))
+            return (await deckCollection.FindAsync(_ => true))
                 .ToEnumerable();
         }
 

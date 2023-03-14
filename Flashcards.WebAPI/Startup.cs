@@ -96,6 +96,7 @@ namespace Flashcards.WebAPI
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+		endpoints.MapFallbackToFile("/index.html");
             });
 	}
     }

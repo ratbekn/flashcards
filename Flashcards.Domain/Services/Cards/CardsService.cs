@@ -15,12 +15,11 @@ namespace Flashcards.Domain.Services.Cards
             this.repository = repository;
         }
 
-        public async Task<Card> CreateAsync(Guid userId, string question, string answer)
+        public async Task<Card> CreateAsync(string question, string answer)
         {
             var newCard = new Card
             {
                 Id = Guid.NewGuid(),
-                UserId = userId,
                 Question = question,
                 Answer = answer
             };
@@ -30,7 +29,7 @@ namespace Flashcards.Domain.Services.Cards
             return newCard;
         }
 
-        public async Task UpdateOrDoNothingAsync(Guid userId, Guid cardId, string question, string answer)
+        public async Task UpdateOrDoNothingAsync(Guid cardId, string question, string answer)
         {
             var card = await repository.FindAsync(cardId);
 
@@ -40,14 +39,13 @@ namespace Flashcards.Domain.Services.Cards
             await repository.UpdateAsync(new Card
             {
                 Id = cardId,
-                UserId = userId,
                 Question = question,
                 Answer = answer
             });
         }
 
         public Task<Card> GetAsync(Guid id) => repository.GetAsync(id);
-        public Task<IEnumerable<Card>> GetUsersCards(Guid userId) => repository.GetUsersCards(userId);
+        public Task<IEnumerable<Card>> GetCards() => repository.GetCards();
 
         public async Task DeleteAsync(params Guid[] deleteCardsIds)
         {

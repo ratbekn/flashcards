@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Flashcards.WebAPI.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class DecksController : ControllerBase
@@ -32,11 +31,10 @@ namespace Flashcards.WebAPI.Controllers
         [ProducesResponseType( StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Create(DeckCreateModel deckCreateModel)
         {
-            var userId = HttpContext.User.GetUserId();
             var newCards = await Task.WhenAll(deckCreateModel.Cards
-                .Select(newCard => cardsService.CreateAsync(userId, newCard.Question, newCard.Answer)));
+                .Select(newCard => cardsService.CreateAsync(newCard.Question, newCard.Answer)));
 
-            var newDeck = await decksService.CreateAsync(userId, deckCreateModel.Name, newCards);
+            var newDeck = await decksService.CreateAsync(deckCreateModel.Name, newCards);
 
             return CreatedAtAction(nameof(Find), new { id = newDeck.Id }, new DeckModel
             {
@@ -58,14 +56,13 @@ namespace Flashcards.WebAPI.Controllers
             if (deck == null)
                 return NotFound(id);
 
-            var userId = HttpContext.User.GetUserId();
             var cards = deckUpdateModel.Cards ?? new List<CardUpdateModel>();
 
             foreach (var card in cards.Where(card => card.Id.HasValue))
-                await cardsService.UpdateOrDoNothingAsync(userId, card.Id.Value, card.Question, card.Answer);
+                await cardsService.UpdateOrDoNothingAsync(card.Id.Value, card.Question, card.Answer);
 
             var newCards = await Task.WhenAll(cards.Where(card => card.Id == null)
-                .Select(newCard => cardsService.CreateAsync(userId, newCard.Question, newCard.Answer)));
+                .Select(newCard => cardsService.CreateAsync(newCard.Question, newCard.Answer)));
 
             deck = await decksService.GetAsync(id);
 
@@ -106,7 +103,7 @@ namespace Flashcards.WebAPI.Controllers
         [ProducesResponseType( StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAll()
         {
-            var decks = await decksService.GetUsersDecks(HttpContext.User.GetUserId());
+            var decks = await decksService.GetDecks();
 
             return Ok(await Task.WhenAll(decks.Select(async deck =>
             {
@@ -141,3 +138,4 @@ namespace Flashcards.WebAPI.Controllers
         }
     }
 }
+
